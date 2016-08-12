@@ -163,4 +163,15 @@ public class VideoFragment extends Fragment implements View.OnTouchListener, Ada
         return true;
     }
 
+    /**
+     * 获取搜索结果的长度
+     * @return
+     */
+    public int getResultListLength() {
+        if(result!=null&&result.size()>0) {
+            return result.size();
+        }
+        return 0;
+    }
+
 }

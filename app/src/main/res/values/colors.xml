@@ -22,4 +22,8 @@
     <color name="light_grey">#EEEEEE</color>
     <color name="white_transparent">#99FFFFFF</color>
     <color name="black">#000</color>
+
+    <color name="tab_number_background_has_read">#E0E0E0</color>
+    <color name="tab_number_background_no_read">#FF0000</color>
+
 </resources>

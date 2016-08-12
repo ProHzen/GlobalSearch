@@ -3,22 +3,23 @@ package com.bbk.open.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bbk.open.Utils.PhotoHandle;
+import com.bbk.open.Utils.ToolUtil;
 import com.bbk.open.globlesearch.R;
 import com.bbk.open.model.FileInfo;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
  * Created by Administrator on 2016/7/20.
@@ -96,7 +97,14 @@ public class MyAdapter extends BaseAdapter {
                 break;
             case FileInfo.TYPE_AUDIO:
             case FileInfo.TYPE_AUDIO+100:
-                holder.ivIcon.setImageResource(R.drawable.audio);
+                //加载音乐专辑图
+                String albumPath=ToolUtil.getAlbumByFilePath(context,list.get(i).getPath());
+                Glide.with(context)
+                        .load(albumPath)
+                        .centerCrop()
+                        .placeholder(R.drawable.default_icon)
+                        .crossFade()
+                        .into(holder.ivIcon);
                 break;
             case FileInfo.TYPE_PDF:
             case FileInfo.TYPE_PDF+100:
@@ -124,6 +132,12 @@ public class MyAdapter extends BaseAdapter {
             case FileInfo.TYPE_SMS+100:
                 holder.ivIcon.setImageResource(R.drawable.sms);
                 break;
+            case FileInfo.TYPE_INSTALL:
+                //加载安装包Icon
+                Drawable tempIcon= ToolUtil.getApkIcon(context,list.get(i).getPath());
+                holder.ivIcon.setImageDrawable(tempIcon);
+                break;
+
             default:
                 holder.ivIcon.setImageResource(R.drawable.default_icon);
         }
