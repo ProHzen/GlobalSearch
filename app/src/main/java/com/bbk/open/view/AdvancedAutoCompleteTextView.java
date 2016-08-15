@@ -9,12 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 
-import com.bbk.open.ContextHolder;
-import com.bbk.open.activity.MainActivity;
-import com.bbk.open.eventbus.MessageEvent;
-import com.bbk.open.globlesearch.R;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Administrator on 2016/8/5.

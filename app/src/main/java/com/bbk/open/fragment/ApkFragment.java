@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +20,6 @@ import android.widget.Toast;
 
 import com.bbk.open.Utils.FilesDao;
 import com.bbk.open.Utils.OpenUtils;
-import com.bbk.open.Utils.SearchUtils;
 import com.bbk.open.adapter.MyAdapter;
 import com.bbk.open.globlesearch.R;
 import com.bbk.open.model.FileInfo;
@@ -146,5 +141,15 @@ public class ApkFragment extends Fragment implements View.OnTouchListener, Adapt
         return true;
     }
 
+    /**
+     * 获取搜索结果的长度
+     * @return
+     */
+    public int getResultListLength() {
+        if(result!=null&&result.size()>0) {
+            return result.size();
+        }
+        return 0;
+    }
 
 }

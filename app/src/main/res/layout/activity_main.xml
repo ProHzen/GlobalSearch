@@ -42,12 +42,22 @@
     </LinearLayout>
 
 
+    <com.bbk.open.view.PagerSlidingTabStripNumber
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+    </com.bbk.open.view.PagerSlidingTabStripNumber>
+
+
+    <!--
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
     </com.astuetz.PagerSlidingTabStrip>
+    -->
 
 
 

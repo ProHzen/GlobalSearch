@@ -2,43 +2,26 @@ package com.bbk.open.activity;
 
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.astuetz.PagerSlidingTabStrip;
-import com.bbk.open.ContextHolder;
-import com.bbk.open.Utils.FilesDao;
-import com.bbk.open.Utils.SearchUtils;
-import com.bbk.open.adapter.AutoAdapter;
-import com.bbk.open.eventbus.MessageEvent;
 import com.bbk.open.fragment.ApkFragment;
 import com.bbk.open.fragment.AppFragment;
 import com.bbk.open.fragment.AudioFragment;
@@ -50,13 +33,14 @@ import com.bbk.open.fragment.VideoFragment;
 import com.bbk.open.globlesearch.R;
 import com.bbk.open.view.AdvancedAutoCompleteTextView;
 import com.bbk.open.view.CircularAnimUtil;
+import com.bbk.open.view.PagerSlidingTabStripNumber;
 import com.example.captain_miao.grantap.CheckPermission;
 import com.example.captain_miao.grantap.listeners.PermissionListener;
 import com.github.clans.fab.FloatingActionMenu;
 import com.shamanland.fab.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
-import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, AdvancedAutoCompleteTextView.startVoiceLister {
@@ -71,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
     private ApkFragment apkFragment;
     private ViewPager viewPager;
     private FragmentAdapter adapter;
-    private PagerSlidingTabStrip tabStrip;
+    private PagerSlidingTabStripNumber tabStrip;
     private AdvancedAutoCompleteTextView auto_searchkey;
     private Button bt_search_web;
     private FloatingActionButton fab_hide;
@@ -80,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
     private com.github.clans.fab.FloatingActionButton fabHide;
     private com.github.clans.fab.FloatingActionButton fabScan;
     private List<FloatingActionMenu> menus = new ArrayList<>();
+
+    /** 保存各Fragment搜索结果长度*/
+    private List<Integer> lengthList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
 
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.viewpage1r);
-        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tab);
+        tabStrip = (PagerSlidingTabStripNumber) findViewById(R.id.tab);
         auto_searchkey = (AdvancedAutoCompleteTextView) findViewById(R.id.tv_searchkey);
         bt_search_web = (Button) findViewById(R.id.bt_search_web);
 
@@ -102,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
     }
 
     private void init() {
+
+        lengthList=new ArrayList<>();
+
         viewPager.setOffscreenPageLimit(8);
         adapter = new FragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
@@ -184,6 +174,31 @@ public class MainActivity extends AppCompatActivity implements TextWatcher, View
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
         }
+
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+
+            //每次有新的搜索都必须清空
+            lengthList.clear();
+
+            //按序添加
+            lengthList.add(appFragment.getResultListLength());
+            lengthList.add(contactFragment.getResultListLength());
+            lengthList.add(smsFragment.getResultListLength());
+            lengthList.add(imageFragment.getResultListLength());
+            lengthList.add(audioFragment.getResultListLength());
+            lengthList.add(videoFragment.getResultListLength());
+            lengthList.add(docFragment.getResultListLength());
+            lengthList.add(apkFragment.getResultListLength());
+
+
+            //设置并更新
+            tabStrip.setLengthList(lengthList);
+            tabStrip.notifyDataSetChanged();
+        }
+
 
         @Override
         public Fragment getItem(int position) {
